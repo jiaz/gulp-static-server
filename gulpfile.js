@@ -38,12 +38,12 @@ gulp.task('watch', function() {
 });
 
 gulp.task('webserver', function() {
-  gulp.src('./')
-    .pipe(webserver({
-      livereload: true,
-      directoryListing: true,
-      open: true
-    }));
+    gulp.src('./')
+        .pipe(webserver({
+            livereload: true,
+            directoryListing: true,
+            open: true
+        }));
 });
 
 gulp.task('default', function() {
