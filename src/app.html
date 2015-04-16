@@ -1,0 +1,48 @@
+<app>
+  <div id="header">
+    <a id="yc" href="http://www.ycombinator.com">
+      <img src="https://news.ycombinator.com/y18.gif">
+    </a>
+    <h1><a href="#">Hacker News</a></h1>
+    <span class="source">
+      Built with <a href="https://muut.com/riotjs/" target="_blank">Riot.js</a> |
+      <a href="https://github.com/jiaz/gulp-static-server" target="_blank">Source</a>
+    </span>
+  </div>
+  <div id="hnview"></div>
+
+  <script>
+  var self = this
+  self.currentView = null
+
+  loadView(viewName, id) {
+    if (self.currentView) {
+      self.currentView.unmount()
+    }
+    self.currentView = riot.mount('div#hnview', viewName, {data: id})[0]
+  }
+
+  studyRoute(view, id) {
+    switch(view) {
+    case 'user':
+      require('./views/user-view.html')
+      self.loadView('user-view', id)
+      break
+    case 'item':
+      require('./views/item-view.html')
+      self.loadView('item-view', id)
+      break
+    case 'news':
+      require('./views/news-view.html')
+      self.loadView('news-view', id)
+      break
+    default:
+      riot.route('news/1')
+    }
+  }
+  riot.route(self.studyRoute)
+  this.on('mount', function() {
+    riot.route.exec(self.studyRoute)
+  })
+  </script>
+</app>

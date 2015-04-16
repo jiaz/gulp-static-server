@@ -1,0 +1,48 @@
+<item-view>
+  <div class="view item-view" show={ items.length }>
+    <item class="item" each={ items } data={ this }></item>
+    <ul class="poll-options" if={ pollOptions }>
+      <li each={ pollOptions }>
+        <p>{ text }</p>
+        <p class="subtext">{ score } points</p>
+      </li>
+    </ul>
+    <ul class="comments" if={ comments }>
+      <comment each={ comments } data={ this }></comment>
+    </ul>
+    <p show={ !comments.length }>No comments yet.</p>
+  </div>
+
+  <script>
+  require('../components/item.html')
+  require('../components/comment.html')
+  var store = require('../store')
+  var self = this
+  self.items = []
+
+  fetchComments() {
+    store.fetchItems(self.items[0].kids, function (comments) {
+      self.comments = comments
+      self.update()
+    })
+  }
+
+  fetchPollOptions() {
+    store.fetchItems(self.items[0].parts, function (options) {
+      self.pollOptions = options
+      self.update()
+    })
+  }
+
+  self.on('mount', function() {
+    store.fetchItem(opts.data, function (item) {
+      self.items = [ item ]
+      self.fetchComments()
+      if (item.type === 'poll') {
+        self.fetchPollOptions()
+      }
+      self.update()
+    })
+  })
+  </script>
+</item-view>
